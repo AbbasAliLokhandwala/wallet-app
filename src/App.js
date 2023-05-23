@@ -1,32 +1,13 @@
+import React, { useContext } from "react";
 import "./App.css";
-import React, { useState } from "react";
 import ConnectWallet from "./components/ConnectWallet";
-import InfoAndSendTokenForm from "./components/InfoAndSendTokenForm";
-import { MyContext } from "./contextApi/Context";
+import SendToken from "./components/SendToken";
+import { WalletContext } from "./context/WalletContext";
 
 const App = () => {
-  const [account, setAccount] = useState(0);
-  const [tokenBal, setTokenBal] = useState(0);
-  const [cardVisible, setCardVisible] = useState(true);
+  const { address } = useContext(WalletContext);
 
-  return (
-    <MyContext.Provider
-      value={{
-        account,
-        setAccount,
-        tokenBal,
-        setTokenBal,
-        cardVisible,
-        setCardVisible,
-        
-      }}
-    >
-      <div className="App">
-        <ConnectWallet />
-        <InfoAndSendTokenForm />
-      </div>
-    </MyContext.Provider>
-  );
+  return <div className="app">{!address ? <ConnectWallet /> : <SendToken />}</div>;
 };
 
 export default App;
