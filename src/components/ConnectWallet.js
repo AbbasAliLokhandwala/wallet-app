@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import { Card, CardBody, Button } from "reactstrap";
 import { connectWalletHandler } from "../utils/connectWalletHander";
-import { MyContext } from "../contextApi/MyContext";
+import { MyContext } from "../contextApi/Context";
 
 const ConnectWallet = () => {
-  const { setAccount } = useContext(MyContext);
+  const { setAccount, setTokenBal, cardVisible, setCardVisible } =
+    useContext(MyContext);
 
   return (
     <div
@@ -15,20 +16,24 @@ const ConnectWallet = () => {
         height: "20vh",
       }}
     >
-      <Card style={{ width: "400px" }}>
-        <CardBody>
-          <Button
-            onClick={() => connectWalletHandler(setAccount)}
-            style={{
-              width: "350px",
-              backgroundColor: "#158DE8",
-              fontWeight: "bold",
-            }}
-          >
-            Connect Wallet
-          </Button>
-        </CardBody>
-      </Card>
+      {cardVisible ? (
+        <Card style={{ width: "400px" }}>
+          <CardBody>
+            <Button
+              onClick={() =>
+                connectWalletHandler(setAccount, setTokenBal, setCardVisible)
+              }
+              style={{
+                width: "350px",
+                backgroundColor: "#158DE8",
+                fontWeight: "bold",
+              }}
+            >
+              Connect Wallet
+            </Button>
+          </CardBody>
+        </Card>
+      ) : null}
     </div>
   );
 };

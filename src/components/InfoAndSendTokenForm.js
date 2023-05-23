@@ -1,25 +1,44 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Card, CardBody, Button, Input, Label } from "reactstrap";
-import { MyContext } from "../contextApi/MyContext";
+import { MyContext } from "../contextApi/Context";
 import trimAddress from "../utils/trimAddress";
-import { isValidAddress, disconnectAccount } from "../utils/ethersUtils";
+import {
+  isValidAddress,
+  disconnectAccount,
+  getBNBBalance,
+} from "../utils/ethersUtils";
+import { sendTransaction } from "../utils/sendTransaction";
 
 const InfoAndSendTokenForm = () => {
-  const { account } = useContext(MyContext);
-  const trimmedAccount = isValidAddress(account)
+  const [amount, setAmount] = useState(0);
+  const [receiversAddress, setReceiversAddress] = useState(0);
+  const { account, tokenBal, setAccount } = useContext(MyContext);
+  const [walletBNBBal, setWalletBNBBal] = useState(0);
+
+  useEffect(() => {
+    const fetchBNBBalance = async () => {
+      if (isValidAddress(account)) {
+        const balance = await getBNBBalance(account);
+        setWalletBNBBal(balance);
+      }
+    };
+
+    fetchBNBBalance();
+  }, [account]);
+
+  const trimmedAccount = isValidAddress(account.toString())
     ? trimAddress(account)
-    : trimAddress(account);
-  console.log("aaaaa: " + trimmedAccount);
+    : "0x00";
+
   return (
     <div
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        
       }}
     >
-      <Card style={{ width: "400px" }}>
+      <Card style={{ width: "400px", fontWeight: "bold" }}>
         <CardBody>
           <div className="bal-container">
             <div
@@ -27,60 +46,75 @@ const InfoAndSendTokenForm = () => {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                color: "#6A6A6A",
+                color: "#158DE8",
               }}
             >
-              <div className="tag">Account: </div> <div>{trimmedAccount}</div>
+              <div className="tag">Account:</div>{" "}
+              <div style={{ color: "#6A6A6A" }}>{trimmedAccount}</div>
             </div>
             <div
               className="babyDoge-bal"
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                color: "#6A6A6A",
+                color: "#158DE8",
               }}
             >
-              <div className="tag">BabyDoge Balance: </div> <div>bal</div>
+              <div className="tag">BabyDoge Balance:</div>{" "}
+              <div style={{ color: "#6A6A6A" }}>{tokenBal}</div>
             </div>
             <div
               className="bnb-bal"
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                color: "#6A6A6A",
+                color: "#158DE8",
               }}
             >
-              <div className="tag">BNB Balance: </div> <div>bal</div>
+              <div className="tag">BNB Balance:</div>
+              <div style={{ color: "#6A6A6A" }}>{walletBNBBal}</div>
             </div>
           </div>
           <div className="send-bnb">
-            <Label for="exampleEmail">Send BNB: </Label>
+            <Label
+              style={{
+                display: "flex",
+                marginTop: "8vh",
+                color: "#158DE8",
+              }}
+              for="exampleEmail"
+            >
+              Send BNB:
+            </Label>
             <Input
               style={{ backgroundColor: "#EBEBEB" }}
               placeholder="Address"
               type="text"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
             />
-            <div>
-              {" "}
+            <div style={{ display: "flex", margin: "1vh" }}>
               <Input
-                style={{ backgroundColor: "#EBEBEB" }}
+                style={{ backgroundColor: "#EBEBEB", marginRight: "1vh" }}
                 placeholder="Amount"
-                type="text"
+                value={receiversAddress}
+                onChange={(e) => setReceiversAddress(e.target.value)}
               />
               <Button
-                style={{ backgroundColor: "#158DE8", fontWeight: "bold" }}
+                onClick={() => sendTransaction(amount, receiversAddress)}
+                style={{ backgroundColor: "#158DE8" }}
               >
-                Send{" "}
+                Send
               </Button>
             </div>
           </div>
 
           <Button
-            onClick={disconnectAccount}
+            onClick={()=>disconnectAccount(setAccount)}
             style={{
               width: "350px",
               backgroundColor: "#158DE8",
-              fontWeight: "bold",
+              marginTop: "8vh",
             }}
           >
             Disconnect Wallet

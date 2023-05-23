@@ -12,6 +12,7 @@ export const getSignerAddress = async () => {
   return signerAddress;
 };
 
+
 export const isValidAddress = (receiversAddress) => {
   try {
     ethers.utils.getAddress(receiversAddress);
@@ -20,16 +21,27 @@ export const isValidAddress = (receiversAddress) => {
     return false;
   }
 };
+export const getBNBBalance = async (address) => {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const balance = await provider.getBalance(address);
+    const balanceInBNB = ethers.utils.formatEther(balance);
+    return balanceInBNB;
+  } catch (error) {
+    console.log("Error getting BNB balance:", error);
+    return null;
+  }
+};
 
-export const disconnectAccount = async () => {
+export const disconnectAccount = async (setAccount) => {
 
-    const provider =new  ethers.providers.Web3Provider();
-console.log(provider);
-    // if (provider.isMetaMask) {
-    //   provider.disconnect(); // Disconnect from MetaMask
-    //   console.log("Disconnected from MetaMask.");
-    // } else {
-    //   console.log("MetaMask is not the current provider.");
-    // }
+  if (window.ethereum && window.ethereum.disconnect) {
+    try {
+      await window.ethereum.disconnect();
+      setAccount = 0;
+    } catch (error) {
+      console.error("Error disconnecting MetaMask:", error);
+    }
+  }
   
 };

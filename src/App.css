@@ -2,17 +2,14 @@
   font-family: "https://fonts.google.com/specimen/Poppins"
   
 } */
+
 .App {
   text-align: center;
 }
 .tag{
-  background-color:"#158DE8";;
+  color:"#158DE8";;
   font-weight: bold;
   
-}
-
-.card-body{
-  margin-bottom: 20px;
 }
 .send-bnb{
   background-color: "#EBEBEB";
