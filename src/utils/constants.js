@@ -1,7 +1,7 @@
-export const BABYDOGE_TOKEN = {
-  name: "DogeChain",
-  symbol: "wDOGE",
+export const WRAPPED_BNB = {
+  name: "Wrapped BNB",
+  symbol: "WBNB",
   decimal: 18,
-  address: "0xc748673057861a797275CD8A068AbB95A902e8de",
+  address: "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
 };
 

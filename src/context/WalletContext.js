@@ -1,5 +1,10 @@
 import { createContext, useEffect, useState } from "react";
-import { getBNBBalance, getSignerAddress, isValidAddress } from "../utils/ethersUtils";
+import {
+  getBNBBalance,
+  getSignerAddress,
+  isValidAddress,
+  getTokenBalance,
+} from "../utils/ethersUtils";
 
 export const WalletContext = createContext();
 
@@ -14,13 +19,17 @@ export const WalletProvider = ({ children }) => {
         if (window.ethereum && window.ethereum.isMetaMask) {
           const addr = await getSignerAddress();
           const bnbBalance = await getBNBBalance();
-          // const tokenBalance = await getTokenBalance();
+          const tokenBalance = await getTokenBalance();
           setWalletBNBBal(bnbBalance);
-          // setTokenBal(tokenBalance);
+          setTokenBal(tokenBalance);
           setAddress(addr);
         }
       } catch (err) {
         console.log(err);
+      }
+
+      if (window.ethereum) {
+        window.ethereum.on("accountsChanged", connectWallet);
       }
     };
     init();
@@ -29,9 +38,9 @@ export const WalletProvider = ({ children }) => {
   const fetchBalances = async () => {
     if (isValidAddress(address)) {
       const bnbBalance = await getBNBBalance();
-      // const tokenBalance = await getTokenBalance();
+      const tokenBalance = await getTokenBalance();
       setWalletBNBBal(bnbBalance);
-      // setTokenBal(tokenBalance);
+      setTokenBal(tokenBalance);
     }
   };
 
@@ -40,9 +49,9 @@ export const WalletProvider = ({ children }) => {
       if (window.ethereum && window.ethereum.isMetaMask) {
         const addr = await getSignerAddress();
         const bnbBalance = await getBNBBalance();
-        // const tokenBalance = await getTokenBalance();
+        const tokenBalance = await getTokenBalance();
         setWalletBNBBal(bnbBalance);
-        // setTokenBal(tokenBalance);
+        setTokenBal(tokenBalance);
         setAddress(addr);
       }
     } catch (err) {
@@ -59,7 +68,16 @@ export const WalletProvider = ({ children }) => {
   };
 
   return (
-    <WalletContext.Provider value={{ address, walletBNBBal, tokenBal, connectWallet, disconnectWallet, fetchBalances }}>
+    <WalletContext.Provider
+      value={{
+        address,
+        walletBNBBal,
+        tokenBal,
+        connectWallet,
+        disconnectWallet,
+        fetchBalances,
+      }}
+    >
       {children}
     </WalletContext.Provider>
   );
