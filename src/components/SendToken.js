@@ -8,7 +8,6 @@ import TokenDropdown from "./TokenDropdown";
 import TransactionAlert from "./TransactionAlert";
 import GasLimit from "./GasLimit";
 import GasPrice from "./GasPrice";
-import TransactionHistory from "./TransactionHistory";
 
 const SendToken = () => {
   const { address, tokenBal, bnbBal, disconnectWallet } =
@@ -21,11 +20,28 @@ const SendToken = () => {
   const [showGasLimitInput, setShowGasLimitInput] = useState(false);
   const [gasLimit, setGasLimit] = useState(42000);
   const [selectedToken, setSelectedToken] = useState("BNB");
-  // const [currentGasPrice,setCurrentGasPrice]= useState();
+  const [invalidAmount, setInvalidAmount] = useState(false);
+
   const handleSelectToken = (token) => {
     setSelectedToken(token);
   };
+
   const handleSendTransaction = async () => {
+    if (parseFloat(amount) < 0) {
+      setInvalidAmount(true);
+      return;
+    }
+    if (selectedToken === "BNB" && parseFloat(amount) > parseFloat(bnbBal)) {
+      setInvalidAmount(true);
+      return;
+    }
+    if (
+      selectedToken === "BabyDoge" &&
+      parseFloat(amount) > parseFloat(tokenBal)
+    ) {
+      setInvalidAmount(true);
+      return;
+    }
     try {
       setLoading(true);
       await sendTransaction(amount, receiversAddress, gasLimit, selectedToken);
@@ -96,15 +112,23 @@ const SendToken = () => {
               <Input
                 placeholder="Amount"
                 type="number"
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={(e) => {
+                  setAmount(e.target.value);
+                  setInvalidAmount(false);
+                }}
               />
+              {invalidAmount && (
+                <div style={{ color: "red" }}>
+                  Amount is negative or greater than balance{" "}
+                </div>
+              )}
             </Col>
             <Col xs={4}>
               <Button
                 color="primary"
                 block
                 onClick={handleSendTransaction}
-                disabled={loading}
+                disabled={loading || invalidAmount === true}
               >
                 {loading ? (
                   <BeatLoader size={8} color="#ffffff" loading={loading} />
@@ -115,8 +139,10 @@ const SendToken = () => {
             </Col>
           </Row>
           <Row>
-            <Col style={{color:"#158DE8"}} xs={9}>Current gas price:</Col>
-            <Col style={{color:"#6A6A6A"}}>
+            <Col style={{ color: "#158DE8" }} xs={9}>
+              Current gas price:
+            </Col>
+            <Col style={{ color: "#6A6A6A" }}>
               <GasPrice />
             </Col>
           </Row>
@@ -125,9 +151,8 @@ const SendToken = () => {
           </Button>
         </CardBody>
       </Card>
-     
-      <TransactionAlert transactionConfirmed={transactionConfirmed} />
 
+      <TransactionAlert transactionConfirmed={transactionConfirmed} />
     </>
   );
 };
