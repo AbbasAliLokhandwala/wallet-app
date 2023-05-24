@@ -2,7 +2,12 @@ import React from "react";
 import { Col, Input, Row } from "reactstrap";
 import { BsChevronDown } from "react-icons/bs";
 
-const GasLimit = ({ showGasLimitInput, toggleGasLimitInput, gasLimit, setGasLimit }) => {
+const GasLimit = ({
+  showGasLimitInput,
+  toggleGasLimitInput,
+  gasLimit,
+  setGasLimit,
+}) => {
   return (
     <Row>
       <Col xs={12} className="heading">

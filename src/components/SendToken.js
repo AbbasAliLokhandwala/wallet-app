@@ -8,6 +8,7 @@ import TokenDropdown from "./TokenDropdown";
 import TransactionAlert from "./TransactionAlert";
 import GasLimit from "./GasLimit";
 import GasPrice from "./GasPrice";
+import TransactionHistory from "./TransactionHistory";
 
 const SendToken = () => {
   const { address, tokenBal, bnbBal, disconnectWallet } =
@@ -124,7 +125,9 @@ const SendToken = () => {
           </Button>
         </CardBody>
       </Card>
+     
       <TransactionAlert transactionConfirmed={transactionConfirmed} />
+
     </>
   );
 };

@@ -8,12 +8,7 @@ const ConnectWallet = () => {
   return (
     <Card style={{ width: "400px" }}>
       <CardBody>
-        <Button
-          onClick={() => connectWallet()}
-          size="md"
-          color="primary"
-          block
-        >
+        <Button onClick={() => connectWallet()} size="md" color="primary" block>
           Connect Wallet
         </Button>
       </CardBody>
