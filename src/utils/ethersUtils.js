@@ -67,13 +67,16 @@ export const getTokenBalance = async () => {
   return balanceInDecimals.slice(0, 7);
 };
 
-// export const getGasPrice = async (setCurrentGasPrice) => {
-//   try {
-//     const provider = new ethers.providers.Web3Provider(window.ethereum);
-//     const gasPrice = await provider.getGasPrice();
-//     console.log("Current gas price:", gasPrice.toString());
-//     setCurrentGasPrice(gasPrice);
-//   } catch (error) {
-//     console.log("Error fetching gas price:", error);
-//   }
-// };
+export const getGasPrice = async () => {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const gasPrice = await provider.getGasPrice();
+    const gasPriceInWei = gasPrice.toString();
+    const gasPriceInGwei = ethers.utils.formatUnits(gasPriceInWei, "gwei");
+    return gasPriceInGwei;
+  } catch (error) {
+    console.log("Error fetching gas price:", error);
+    return null;
+  }
+};
+

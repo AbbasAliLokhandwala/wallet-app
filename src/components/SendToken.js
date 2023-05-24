@@ -7,7 +7,7 @@ import { BeatLoader } from "react-spinners";
 import TokenDropdown from "./TokenDropdown";
 import TransactionAlert from "./TransactionAlert";
 import GasLimit from "./GasLimit";
-// import { getGasPrice } from "../utils/ethersUtils";
+import GasPrice from "./GasPrice";
 
 const SendToken = () => {
   const { address, tokenBal, bnbBal, disconnectWallet } =
@@ -113,7 +113,12 @@ const SendToken = () => {
               </Button>
             </Col>
           </Row>
-          {/* <Row><Col>Current gas price:</Col><Col>{currentGasPrice}</Col></Row> */}
+          <Row>
+            <Col style={{color:"#158DE8"}} xs={9}>Current gas price:</Col>
+            <Col style={{color:"#6A6A6A"}}>
+              <GasPrice />
+            </Col>
+          </Row>
           <Button color="primary" block onClick={() => disconnectWallet()}>
             Disconnect Wallet
           </Button>

@@ -3,7 +3,7 @@ import {
   getBNBBalance,
   getSignerAddress,
   isValidAddress,
-  getTokenBalance,
+  getTokenBalance
 } from "../utils/ethersUtils";
 
 export const WalletContext = createContext();
@@ -27,13 +27,12 @@ export const WalletProvider = ({ children }) => {
       } catch (err) {
         console.log(err);
       }
-
+  
       if (window.ethereum) {
         window.ethereum.on("accountsChanged", connectWallet);
       }
     };
     init();
-    // getGasPrice();
   }, []);
 
   const fetchBalances = async () => {
