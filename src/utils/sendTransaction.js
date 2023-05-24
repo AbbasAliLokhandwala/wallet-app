@@ -8,7 +8,6 @@ export const sendTransaction = async (
   gasLimit,
   selectedToken
 ) => {
-  try {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const parsedAmount = ethers.utils.parseUnits(amount.toString(), 18);
@@ -35,7 +34,4 @@ export const sendTransaction = async (
       );
       console.log("BabyDoge Transaction sent:", tx);
     } 
-  } catch (error) {
-    console.log("Error sending transaction:", error);
-  }
 };

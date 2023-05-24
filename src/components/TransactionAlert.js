@@ -5,7 +5,7 @@ const TransactionAlert = ({ transactionConfirmed }) => {
   const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
-    if (transactionConfirmed) {
+    if (transactionConfirmed != null) {
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
@@ -15,9 +15,9 @@ const TransactionAlert = ({ transactionConfirmed }) => {
 
   return (
     <div className="alert-container">
-      {transactionConfirmed && showAlert && (
-        <Alert color="primary" className="mt-3">
-          Transaction Broadcasted!
+      {showAlert && (
+        <Alert color={transactionConfirmed ? "primary" : "danger"} className="mt-3">
+          {transactionConfirmed ? "Transaction Broadcasted!" : "Transaction Failed"}
         </Alert>
       )}
     </div>

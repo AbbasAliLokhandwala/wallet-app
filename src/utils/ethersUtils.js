@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { BABYDOGE_TOKEN } from "./constants";
+import { BABYDOGE_TOKEN, CHAIN_ID } from "./constants";
 import ERC20_ABI from "./erc20Abi";
 
 const getAccount = async () => {
@@ -15,7 +15,7 @@ const changeNetwork = async () => {
     try {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x61" }],
+        params: [{ chainId: CHAIN_ID }],
       });
     } catch (error) {
       // This error code indicates that the chain has not been added to MetaMask

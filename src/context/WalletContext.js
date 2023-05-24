@@ -4,7 +4,6 @@ import {
   getSignerAddress,
   isValidAddress,
   getTokenBalance,
-  getGasPrice
 } from "../utils/ethersUtils";
 
 export const WalletContext = createContext();
@@ -12,7 +11,7 @@ export const WalletContext = createContext();
 export const WalletProvider = ({ children }) => {
   const [address, setAddress] = useState();
   const [tokenBal, setTokenBal] = useState();
-  const [walletBNBBal, setWalletBNBBal] = useState();
+  const [bnbBal, setBnbBal] = useState();
 
   useEffect(() => {
     const init = async () => {
@@ -21,7 +20,7 @@ export const WalletProvider = ({ children }) => {
           const addr = await getSignerAddress();
           const bnbBalance = await getBNBBalance();
           const tokenBalance = await getTokenBalance();
-          setWalletBNBBal(bnbBalance);
+          setBnbBal(bnbBalance);
           setTokenBal(tokenBalance);
           setAddress(addr);
         }
@@ -34,14 +33,14 @@ export const WalletProvider = ({ children }) => {
       }
     };
     init();
-    getGasPrice();
+    // getGasPrice();
   }, []);
 
   const fetchBalances = async () => {
     if (isValidAddress(address)) {
       const bnbBalance = await getBNBBalance();
       const tokenBalance = await getTokenBalance();
-      setWalletBNBBal(bnbBalance);
+      setBnbBal(bnbBalance);
       setTokenBal(tokenBalance);
     }
   };
@@ -52,7 +51,7 @@ export const WalletProvider = ({ children }) => {
         const addr = await getSignerAddress();
         const bnbBalance = await getBNBBalance();
         const tokenBalance = await getTokenBalance();
-        setWalletBNBBal(bnbBalance);
+        setBnbBal(bnbBalance);
         setTokenBal(tokenBalance);
         setAddress(addr);
       }
@@ -73,7 +72,7 @@ export const WalletProvider = ({ children }) => {
     <WalletContext.Provider
       value={{
         address,
-        walletBNBBal,
+        bnbBal,
         tokenBal,
         connectWallet,
         disconnectWallet,

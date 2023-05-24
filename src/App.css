@@ -24,11 +24,14 @@
   text-align: right;
 }
 
+.gas-limit-container {
+  cursor: pointer;
+}
 /* overrides */
 
 .btn-primary {
   background-color: #158de8 !important;
-  color: #F2F2F2 !important;
+  color: #f2f2f2 !important;
   font-weight: 900 !important;
 }
 
@@ -37,7 +40,7 @@
 }
 
 .form-control {
-  background-color: #EBEBEB !important;
+  background-color: #ebebeb !important;
   border: 0 !important;
 }
 

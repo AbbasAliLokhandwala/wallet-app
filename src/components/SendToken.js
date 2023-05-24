@@ -10,15 +10,15 @@ import GasLimit from "./GasLimit";
 // import { getGasPrice } from "../utils/ethersUtils";
 
 const SendToken = () => {
-  const { address, tokenBal, walletBNBBal, disconnectWallet } =
+  const { address, tokenBal, bnbBal, disconnectWallet } =
     useContext(WalletContext);
   const trimmedAccount = formatAddress(address);
   const [amount, setAmount] = useState(0);
   const [receiversAddress, setReceiversAddress] = useState();
   const [loading, setLoading] = useState(false);
-  const [transactionConfirmed, setTransactionConfirmed] = useState(false);
+  const [transactionConfirmed, setTransactionConfirmed] = useState(null);
   const [showGasLimitInput, setShowGasLimitInput] = useState(false);
-  const [gasLimit, setGasLimit] = useState(21000);
+  const [gasLimit, setGasLimit] = useState(42000);
   const [selectedToken, setSelectedToken] = useState("BNB");
   // const [currentGasPrice,setCurrentGasPrice]= useState();
   const handleSelectToken = (token) => {
@@ -33,6 +33,7 @@ const SendToken = () => {
       console.log("Error sending transaction:", error);
     } finally {
       setLoading(false);
+      setTransactionConfirmed(false);
     }
   };
   const toggleGasLimitInput = () => {
@@ -56,7 +57,7 @@ const SendToken = () => {
               BNB Balance:
             </Col>
             <Col sm={6} className="value">
-              {walletBNBBal}
+              {bnbBal}
             </Col>
           </Row>
           <Row>
@@ -67,11 +68,13 @@ const SendToken = () => {
               {tokenBal}
             </Col>
           </Row>
+
+          <TokenDropdown
+            selectedToken={selectedToken}
+            onSelectToken={handleSelectToken}
+          />
+
           <Row>
-            <TokenDropdown
-              selectedToken={selectedToken}
-              onSelectToken={handleSelectToken}
-            />
             <Col xs={12} className="heading">
               <Input
                 className="inputValue"
@@ -81,16 +84,12 @@ const SendToken = () => {
               />
             </Col>
           </Row>
-          <Row>
-            {" "}
-            <Col style={{ color: "#158DE8" }}>Set Gas Limit</Col>
-            <GasLimit
-              showGasLimitInput={showGasLimitInput}
-              toggleGasLimitInput={toggleGasLimitInput}
-              gasLimit={gasLimit}
-              setGasLimit={setGasLimit}
-            />
-          </Row>
+          <GasLimit
+            showGasLimitInput={showGasLimitInput}
+            toggleGasLimitInput={toggleGasLimitInput}
+            gasLimit={gasLimit}
+            setGasLimit={setGasLimit}
+          />
           <Row>
             <Col xs={8}>
               <Input
