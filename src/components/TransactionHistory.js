@@ -36,7 +36,6 @@ function TransactionHistoryTable({ dogResult }) {
   ];
 
   const options = {
-    page: 0,
     sizePerPageList: [
       {
         text: "5",
@@ -58,7 +57,14 @@ function TransactionHistoryTable({ dogResult }) {
     nextPage: "Next",
     firstPage: "First",
     lastPage: "Last",
+    onPageChange: () => {
+      // No action required as we're not using previous and next buttons
+    },
   };
+
+  if (!dogResult || dogResult.length === 0) {
+    return <div>No transactions found.</div>;
+  }
 
   return (
     <div className="container">
