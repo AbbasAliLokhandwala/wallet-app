@@ -5,6 +5,13 @@
   font-family: "Poppins";
   font-size: 14px;
 }
+.alert-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  pointer-events: none;
+}
 
 .heading {
   font-weight: 700;

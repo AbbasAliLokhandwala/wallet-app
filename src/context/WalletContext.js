@@ -4,6 +4,7 @@ import {
   getSignerAddress,
   isValidAddress,
   getTokenBalance,
+  getGasPrice
 } from "../utils/ethersUtils";
 
 export const WalletContext = createContext();
@@ -33,6 +34,7 @@ export const WalletProvider = ({ children }) => {
       }
     };
     init();
+    getGasPrice();
   }, []);
 
   const fetchBalances = async () => {

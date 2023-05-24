@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { WRAPPED_BNB } from "./constants";
+import { BABYDOGE_TOKEN } from "./constants";
 import ERC20_ABI from "./erc20Abi";
 
 const getAccount = async () => {
@@ -56,7 +56,7 @@ export const getTokenBalance = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   let tokenContract = new ethers.Contract(
-    WRAPPED_BNB.address,
+    BABYDOGE_TOKEN.address,
     ERC20_ABI,
     signer
   );
@@ -66,3 +66,14 @@ export const getTokenBalance = async () => {
   const balanceInDecimals = ethers.utils.formatEther(balanceInWei);
   return balanceInDecimals.slice(0, 7);
 };
+
+// export const getGasPrice = async (setCurrentGasPrice) => {
+//   try {
+//     const provider = new ethers.providers.Web3Provider(window.ethereum);
+//     const gasPrice = await provider.getGasPrice();
+//     console.log("Current gas price:", gasPrice.toString());
+//     setCurrentGasPrice(gasPrice);
+//   } catch (error) {
+//     console.log("Error fetching gas price:", error);
+//   }
+// };
