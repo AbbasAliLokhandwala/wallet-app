@@ -9,7 +9,8 @@ import TransactionAlert from "../TransactionAlert";
 import WalletDetails from "./WalletDetails";
 
 const SendToken = () => {
-  const { address, tokenBal, bnbBal, disconnectWallet } = useContext(WalletContext);
+  const { address, tokenBal, bnbBal, disconnectWallet } =
+    useContext(WalletContext);
   const [amount, setAmount] = useState(0);
   const [receiversAddress, setReceiversAddress] = useState();
   const [loading, setLoading] = useState(false);
@@ -26,12 +27,12 @@ const SendToken = () => {
   const checkInvalidAmount = () => {
     const validateAmount = parseFloat(amount);
     switch (selectedToken) {
+      default:
+        return validateAmount < 0;
       case "BNB":
         return validateAmount > parseFloat(bnbBal);
       case "BabyDoge":
         return validateAmount > parseFloat(tokenBal);
-      default:
-        return validateAmount < 0;
     }
   };
 
@@ -54,7 +55,10 @@ const SendToken = () => {
       <Card style={{ width: "400px", fontWeight: "bold", margin: "auto" }}>
         <CardBody>
           <WalletDetails />
-          <TokenDropdown selectedToken={selectedToken} onSelectToken={handleSelectToken} />
+          <TokenDropdown
+            selectedToken={selectedToken}
+            onSelectToken={handleSelectToken}
+          />
           <Row>
             <Col xs={12} className="heading">
               <Input
@@ -73,18 +77,29 @@ const SendToken = () => {
                 type="number"
                 onChange={(e) => {
                   setAmount(e.target.value);
-                  setInvalidAmount(false);
+                  setInvalidAmount(checkInvalidAmount());
                 }}
+                style={{ color: invalidAmount ? "red" : "inherit" }}
               />
-              {invalidAmount && <div style={{ color: "red" }}>Amount is negative or greater than balance </div>}
+              {invalidAmount && (
+                <div style={{ color: "red" }}>
+                  Amount is greater than balance
+                </div>
+              )}
             </Col>
+
             <Col xs={4}>
               <Button
                 color="primary"
                 block
                 onClick={handleSendTransaction}
-                disabled={loading || invalidAmount === true}>
-                {loading ? <BeatLoader size={8} color="#ffffff" loading={loading} /> : "Send"}
+                disabled={loading || invalidAmount || amount <= 0}
+              >
+                {loading ? (
+                  <BeatLoader size={8} color="#ffffff" loading={loading} />
+                ) : (
+                  "Send"
+                )}
               </Button>
             </Col>
           </Row>

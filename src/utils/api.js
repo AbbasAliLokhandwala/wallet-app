@@ -10,6 +10,5 @@ export const fetchTransactionList = async (page, offset) => {
     to: item.to,
     blockNumber: item.blockNumber,
   }));
-  console.log(page, offset, transactionData)
   return transactionData;
 };

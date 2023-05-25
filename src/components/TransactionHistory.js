@@ -5,7 +5,7 @@ import formatAddress from "../utils/formatAddress";
 import { fetchTransactionList } from "../utils/api";
 import { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
-import { Button } from "reactstrap";
+import { Button, Input } from "reactstrap";
 
 const columns = [
   {
@@ -49,19 +49,17 @@ function TransactionHistoryTable() {
       const data = await fetchTransactionList(1, 10);
       setTransactionList(data);
       setIsLoading(false);
-    }
+    };
     init();
-
   }, []);
 
   const onPageChange = async (page, offset) => {
-    console.log(page, sizePerPage)
     setIsLoading(true);
     const data = await fetchTransactionList(page, offset);
     setTransactionList(data);
     setIsLoading(false);
     setCurrentPage(page);
-  }
+  };
 
   return isLoading ? (
     <span className="m-auto inline">
@@ -78,17 +76,43 @@ function TransactionHistoryTable() {
           columns={columns}
           filter={filterFactory()}
         />
-        <div><select className="form-control" value={sizePerPage} onChange={(e) => {
-          setSizePerPage(e.target.value);
-          onPageChange(currentPage, e.target.value);
-        }}>
-          <option value={5}>5</option>
-          <option value={10}>10</option>
-        </select>
-          <div>
-            <Button color="primary" size="sm" className="mx-1" onClick={() => onPageChange(currentPage - 1, sizePerPage)} disabled={currentPage == 1}>Prev</Button>
-            Page: {currentPage}
-            <Button color="primary" size="sm" className="mx-1" onClick={() => onPageChange(currentPage + 1, sizePerPage)} disabled={transactionList.length < sizePerPage}>Next</Button>
+        <div>
+          <div className="d-flex" style={{ justifyContent: "space-between" }}>
+            <Input
+              style={{ width: "5vh" }}
+              type="select"
+              className="form-control"
+              value={sizePerPage}
+              onChange={(e) => {
+                setSizePerPage(e.target.value);
+                onPageChange(currentPage, e.target.value);
+              }}
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+            </Input>
+
+            <div className="ml-auto">
+              <Button
+                color="primary"
+                size="sm"
+                className="mx-1"
+                onClick={() => onPageChange(currentPage - 1, sizePerPage)}
+                disabled={currentPage === 1}
+              >
+                Prev
+              </Button>
+              Page: {currentPage}
+              <Button
+                color="primary"
+                size="sm"
+                className="mx-1"
+                onClick={() => onPageChange(currentPage + 1, sizePerPage)}
+                disabled={transactionList.length < sizePerPage}
+              >
+                Next
+              </Button>
+            </div>
           </div>
         </div>
       </div>
