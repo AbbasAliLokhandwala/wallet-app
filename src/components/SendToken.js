@@ -59,7 +59,7 @@ const SendToken = () => {
 
   return (
     <>
-      <Card style={{ width: "400px", fontWeight: "bold" }}>
+      <Card style={{ width: "400px", fontWeight: "bold", margin: "auto" }}>
         <CardBody>
           <Row>
             <Col sm={6} className="heading">

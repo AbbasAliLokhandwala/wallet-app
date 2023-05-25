@@ -6,7 +6,7 @@ const ConnectWallet = () => {
   const { connectWallet } = useContext(WalletContext);
 
   return (
-    <Card style={{ width: "400px" }}>
+    <Card style={{ width: "400px", margin: "auto" }}>
       <CardBody>
         <Button onClick={() => connectWallet()} size="md" color="primary" block>
           Connect Wallet

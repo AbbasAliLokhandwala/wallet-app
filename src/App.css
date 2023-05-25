@@ -4,6 +4,7 @@
   justify-content: center;
   font-family: "Poppins";
   font-size: 14px;
+  flex-direction: column;
 }
 .alert-container {
   position: fixed;

@@ -2,82 +2,95 @@ import BootstrapTable from "react-bootstrap-table-next";
 import filterFactory from "react-bootstrap-table2-filter";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import formatAddress from "../utils/formatAddress";
+import { fetchTransactionList } from "../utils/api";
+import { useEffect, useState } from "react";
+import { SyncLoader } from "react-spinners";
+import { Button } from "reactstrap";
 
-function TransactionHistoryTable({ dogResult }) {
-  const columns = [
-    {
-      dataField: "transactionHash",
-      text: "Transaction Hash",
-      sort: true,
-      formatter: (cell) => formatAddress(cell),
-    },
-    {
-      dataField: "value",
-      text: "Value",
-      sort: true,
-    },
-    {
-      dataField: "from",
-      text: "From",
-      sort: true,
-      formatter: (cell) => formatAddress(cell),
-    },
-    {
-      dataField: "to",
-      text: "To",
-      sort: true,
-      formatter: (cell) => formatAddress(cell),
-    },
-    {
-      dataField: "blockNumber",
-      text: "Block Number",
-      sort: true,
-    },
-  ];
+const columns = [
+  {
+    dataField: "transactionHash",
+    text: "Transaction Hash",
+    sort: true,
+    formatter: (cell) => formatAddress(cell),
+  },
+  {
+    dataField: "value",
+    text: "Value",
+    sort: true,
+  },
+  {
+    dataField: "from",
+    text: "From",
+    sort: true,
+    formatter: (cell) => formatAddress(cell),
+  },
+  {
+    dataField: "to",
+    text: "To",
+    sort: true,
+    formatter: (cell) => formatAddress(cell),
+  },
+  {
+    dataField: "blockNumber",
+    text: "Block Number",
+    sort: true,
+  },
+];
 
-  const options = {
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "All",
-        value: dogResult.length,
-      },
-    ],
-    sizePerPage: 10,
-    pageStartIndex: 0,
-    paginationSize: 3,
-    prePage: "Prev",
-    nextPage: "Next",
-    firstPage: "First",
-    lastPage: "Last",
-    onPageChange: () => {
-      // No action required as we're not using previous and next buttons
-    },
-  };
+function TransactionHistoryTable() {
+  const [transactionList, setTransactionList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  useEffect(() => {
+    const init = async () => {
+      setIsLoading(true);
+      const data = await fetchTransactionList(1, 10);
+      setTransactionList(data);
+      setIsLoading(false);
+    }
+    init();
 
-  if (!dogResult || dogResult.length === 0) {
-    return <div>No transactions found.</div>;
+  }, []);
+
+  const onPageChange = async (page, offset) => {
+    console.log(page, sizePerPage)
+    setIsLoading(true);
+    const data = await fetchTransactionList(page, offset);
+    setTransactionList(data);
+    setIsLoading(false);
+    setCurrentPage(page);
   }
 
-  return (
+  return isLoading ? (
+    <span className="m-auto inline">
+      Loading Transactions <SyncLoader size={10} />
+    </span>
+  ) : (
     <div className="container">
       <div style={{ marginTop: 20 }}>
         <BootstrapTable
           striped
           hover
           keyField="transactionHash"
-          data={dogResult}
+          data={transactionList}
           columns={columns}
           filter={filterFactory()}
-          pagination={paginationFactory(options)}
         />
+        <div><select className="form-control" value={sizePerPage} onChange={(e) => {
+          setSizePerPage(e.target.value);
+          onPageChange(currentPage, e.target.value);
+        }}>
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+        </select>
+          <div>
+            <Button color="primary" size="sm" className="mx-1" onClick={() => onPageChange(currentPage - 1, sizePerPage)} disabled={currentPage == 1}>Prev</Button>
+            Page: {currentPage}
+            <Button color="primary" size="sm" className="mx-1" onClick={() => onPageChange(currentPage + 1, sizePerPage)} disabled={transactionList.length < sizePerPage}>Next</Button>
+          </div>
+        </div>
       </div>
     </div>
   );
