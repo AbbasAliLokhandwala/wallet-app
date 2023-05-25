@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Col } from "reactstrap";
-import { WalletContext } from "../context/WalletContext";
-import { getGasPrice } from "../utils/ethersUtils";
+import { WalletContext } from "../../context/WalletContext";
+import { getGasPrice } from "../../utils/ethersUtils";
 
 const GasPrice = () => {
   const { address } = useContext(WalletContext);

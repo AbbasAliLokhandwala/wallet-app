@@ -3,7 +3,6 @@ import "./App.css";
 import ConnectWallet from "./components/ConnectWallet";
 import SendToken from "./components/SendToken";
 import { WalletContext } from "./context/WalletContext";
-import { Row, Col } from "reactstrap";
 import TransactionHistoryTable from "./components/TransactionHistory";
 
 const App = () => {
